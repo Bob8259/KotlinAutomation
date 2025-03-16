@@ -173,9 +173,15 @@ class MultiSwipeSimulator {
 
 ## 2. Executing the Class with Root Access
 
-To run this class on a **rooted Android device**, build an APK and place it in your device storage.  
+To run this class on a **rooted Android device**, build this APK and place it in your device storage.  
 Then, use `app_process` to execute it. You can use **libsu** or simply `"su -c"`.
 
+- The path `/sdcard/10.apk` is where you should place your APK file.  
+- `'com.coc.zkq'` is the package name (modify it if necessary).  
+- `'MultiSwipeSimulator'` is the class name.  
+- The following numbers are just example parameters.
+
+- Example command: 
 ```kotlin
 fun runAppProcessAsRoot() {
     try {
