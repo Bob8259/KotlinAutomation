@@ -1,0 +1,1 @@
+I also bought this code. I spent 1100 Chinese Yuan in total in order to realize these touch functions. This one is using the Accessibility service, which does not require root access. But this code is very easy and AI can explain it for you. So feel free to look around.
