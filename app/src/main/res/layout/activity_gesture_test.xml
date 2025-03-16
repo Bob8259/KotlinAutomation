@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".GestureTestActivity">
+
+    <!-- 状态显示区域 -->
+    <TextView
+        android:id="@+id/status_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#E0E0E0"
+        android:padding="8dp"
+        android:text="等待初始化..."
+        android:textSize="16sp"
+        android:minHeight="100dp" />
+
+    <!-- 控制按钮区域 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/long_press_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="执行长按" />
+
+        <Button
+            android:id="@+id/move_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="执行移动" />
+
+        <Button
+            android:id="@+id/up_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="执行抬起" />
+
+        <Button
+            android:id="@+id/long_press_move_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="执行长按并移动测试" />
+
+        <Button
+            android:id="@+id/clear_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="清除所有手势" />
+
+    </LinearLayout>
+
+    <!-- 说明文本 -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="使用说明:\n1. 点击'执行长按'按钮执行长按手势\n2. 点击'执行移动'按钮移动到新位置\n3. 点击'执行抬起'按钮抬起手指\n4. 点击'执行长按并移动测试'按钮自动执行完整测试\n5. 点击'清除所有手势'按钮取消所有手势"
+        android:textSize="14sp" />
+
+</LinearLayout> 

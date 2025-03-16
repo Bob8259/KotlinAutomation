@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Touch</string>
+    <string name="accessibility_service_description">模拟双指缩放手势的辅助功能服务</string>
+    <string name="start_service">启动服务</string>
+    <string name="stop_service">停止服务</string>
+    <string name="zoom_in">启动自动手势</string>
+    <string name="zoom_out">停止自动手势</string>
+    <string name="clear_tracks">清除轨迹</string>
+    <string name="auto_gesture_started">自动手势已启动</string>
+    <string name="auto_gesture_stopped">自动手势已停止</string>
+    <string name="auto_gesture_running">自动手势已在运行中</string>
+    <string name="auto_gesture_not_running">自动手势未在运行</string>
+    <string name="accessibility_settings">辅助功能设置</string>
+    <string name="overlay_permission">悬浮窗权限</string>
+    <string name="service_not_enabled">辅助功能服务未启用</string>
+    <string name="permission_required">需要权限</string>
+    <string name="accessibility_service_not_connected">辅助功能服务未连接，请确保已启用辅助功能</string>
+    
+    <!-- 设置相关 -->
+    <string name="settings">设置</string>
+    <string name="auto_gesture_interval_setting">请输入自动手势的间隔时间（秒）</string>
+    <string name="auto_gesture_interval_set">自动手势间隔时间已设置为 %d 秒</string>
+    <string name="auto_gesture_interval_invalid">请输入有效的间隔时间（至少1秒）</string>
+    
+    <!-- 长按相关 -->
+    <string name="long_press_zoom_in">长按放大</string>
+    <string name="long_press_zoom_out">长按缩小</string>
+    <string name="long_press_zoom_in_started">长按放大已开始</string>
+    <string name="long_press_zoom_out_started">长按缩小已开始</string>
+    <string name="long_press_stopped">长按已停止</string>
+    
+    <!-- 测试工具相关 -->
+    <string name="gesture_test_tool">手势测试工具</string>
+    <string name="test_long_press_drag">测试长按并拖动</string>
+    <string name="test_pinch_in">测试双指捏合（缩小）</string>
+    <string name="test_pinch_out">测试双指张开（放大）</string>
+    <string name="test_taps">测试连续点击</string>
+    <string name="test_custom">使用自定义参数测试</string>
+    <string name="open_test_activity">打开手势测试工具</string>
+</resources>
