@@ -2,7 +2,7 @@
 # KotlinAutomation
 
 This repository implements **TouchDown**, **TouchMove**, and **TouchUp** functions for **rooted devices**, allowing simultaneous multi-finger simulation.  
-For more details, refer to:  
+For more details of these functions, refer to:  
 - [Auto.js](https://github.com/openautojs/openautojs)  
 - [QScript(按键精灵)](https://zimaoxy.com/docs/qscript/keydown/)  
 - [LazyScript(懒人精灵)](http://www.lrappsoft.com/lrhelp/hong-kong-fang-fa/an-zhu-bu-fang.html?h=touchdown)  
