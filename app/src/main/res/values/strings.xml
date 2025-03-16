@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">zkq</string>
+    <string name="accessibility_service_description">模拟双指缩放手势的辅助功能服务</string>
+    <string name="start_service">启动服务</string>
+</resources>
