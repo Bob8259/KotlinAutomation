@@ -1,18 +1,34 @@
+
 # KotlinAutomation
 
-This repo realized TouchDown, TouchMove, and TouchUp functions for Rooted devices. (本仓库使用Kotlin实现root设备上的多点按下，滑动，抬起操作。可同时模拟多根手指).For the details of them, you may refer to [Auto.js](https://github.com/openautojs/openautojs), [按键精灵](https://zimaoxy.com/docs/qscript/keydown/) or [懒人精灵](http://www.lrappsoft.com/lrhelp/hong-kong-fang-fa/an-zhu-bu-fang.html?h=touchdown)
+This repository implements **TouchDown**, **TouchMove**, and **TouchUp** functions for **rooted devices**, allowing simultaneous multi-finger simulation.  
+For more details, refer to:  
+- [Auto.js](https://github.com/openautojs/openautojs)  
+- [QScript](https://zimaoxy.com/docs/qscript/keydown/)  
+- [LazyScript](http://www.lrappsoft.com/lrhelp/hong-kong-fang-fa/an-zhu-bu-fang.html?h=touchdown)  
 
-### Key Words
-Kotlin Automation, Multi-finger, Multi touches, Root, Instumentation, InputManager.
+## Key Features
+- **Kotlin Automation**
+- **Multi-finger and Multi-touch Simulation**
+- **Root Access Required**
+- **Instrumentation & InputManager Integration**
 
-### Core part
-Simulating a real touch is the key part of automation. You can use the Accessibility service to achieve it, but you need to set the whole stroke before dispatching the touches. What if you do not know the whole stroke before sending it? After trying, I found it was extremely hard. Because even with the root permission, you still can not directly inject the gestures into the system. You will get SecurityExecption saying you do not have INJECT_EVENTS permission. So the core part of this repo is here:
+---
 
-### 1 Leave a Class for us to call later
-(I was born in China Mainland and currently, I am living in China Hong Kong. I am too lazy to translate all the comments into English. But I wrote this repo in Eng because I hope this could help more people.)
+## Core Concept
 
+Simulating a real touch is the key challenge in automation. While the **Accessibility Service** allows touch simulations, it requires defining the entire touch sequence **before dispatching events**. 
 
-```
+However, in cases where the entire touch stroke is unknown beforehand, injecting touch events dynamically becomes difficult. Even with root access, **directly injecting gestures into the system is not possible** due to permission restrictions, specifically the `INJECT_EVENTS` permission. 
+
+This repository overcomes this limitation using **InputManager reflection**, allowing dynamic multi-touch simulation.
+
+---
+Because I war born in China mainland and currently living in China Hong Kong, so I wrote all the comments in Chinese. But I wrote the readme in English because I hope this could help more people.
+The following codes are all **translated by AI**, so they may contain errors. Please refer to the repo for the original code.
+## 1. MultiSwipeSimulator Class (Core Implementation)
+
+```kotlin
 package com.coc.zkq
 
 import android.os.SystemClock
@@ -43,7 +59,7 @@ class MultiSwipeSimulator {
                 val downTime = SystemClock.uptimeMillis()
                 var eventTime = downTime
 
-                // 第一个触点按下
+                // First touch point (finger 1) presses down
                 val prop0 = PointerProperties().apply {
                     id = 0
                     toolType = MotionEvent.TOOL_TYPE_FINGER
@@ -62,7 +78,7 @@ class MultiSwipeSimulator {
                 injectInputEventMethod.invoke(inputManager, downEvent, 0)
                 downEvent.recycle()
 
-                // 添加第二个触点
+                // Second touch point (finger 2) presses down
                 eventTime += 20
                 val prop1 = PointerProperties().apply {
                     id = 1
@@ -82,7 +98,7 @@ class MultiSwipeSimulator {
                 injectInputEventMethod.invoke(inputManager, pointerDownEvent, 0)
                 pointerDownEvent.recycle()
 
-                // 计算滑动参数
+                // Calculate movement steps
                 val steps = (duration / 20).coerceAtLeast(1)
                 val stepDuration = duration / steps
                 val deltaX1 = (x1End - x1Start).toFloat()
@@ -90,12 +106,11 @@ class MultiSwipeSimulator {
                 val deltaX2 = (x2End - x2Start).toFloat()
                 val deltaY2 = (y2End - y2Start).toFloat()
 
-                // 发送连续移动事件
+                // Send movement events
                 repeat(steps.toInt()) { step ->
                     eventTime += stepDuration
                     val progress = (step + 1f) / steps
 
-                    // 计算当前坐标
                     val currentCoord0 = PointerCoords().apply {
                         x = x1Start + deltaX1 * progress
                         y = y1Start + deltaY1 * progress
@@ -105,7 +120,6 @@ class MultiSwipeSimulator {
                         y = y2Start + deltaY2 * progress
                     }
 
-                    // 发送移动事件
                     val moveEvent = MotionEvent.obtain(
                         downTime, eventTime,
                         MotionEvent.ACTION_MOVE, 2,
@@ -118,7 +132,7 @@ class MultiSwipeSimulator {
                     SystemClock.sleep(stepDuration)
                 }
 
-                // 抬起第二个触点
+                // Lift second touch point
                 eventTime += stepDuration
                 val pointerUpAction = MotionEvent.ACTION_POINTER_UP or (1 shl MotionEvent.ACTION_POINTER_INDEX_SHIFT)
                 val pointerUpEvent = MotionEvent.obtain(
@@ -133,7 +147,7 @@ class MultiSwipeSimulator {
                 injectInputEventMethod.invoke(inputManager, pointerUpEvent, 0)
                 pointerUpEvent.recycle()
 
-                // 抬起第一个触点
+                // Lift first touch point
                 eventTime += 20
                 val upEvent = MotionEvent.obtain(
                     downTime, eventTime,
@@ -151,58 +165,25 @@ class MultiSwipeSimulator {
                 e.printStackTrace()
             }
         }
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            // 检查参数数量是否正确
-            if (args.size != 9) {
-                println("Usage: MultiSwipeSimulator startX1 startY1 endX1 endY1 startX2 startY2 endX2 endY2 duration")
-                return
-            }
-
-            try {
-                // 解析参数
-                val startX1 = args[0].toInt()
-                val startY1 = args[1].toInt()
-                val endX1 = args[2].toInt()
-                val endY1 = args[3].toInt()
-
-                val startX2 = args[4].toInt()
-                val startY2 = args[5].toInt()
-                val endX2 = args[6].toInt()
-                val endY2 = args[7].toInt()
-
-                val duration = args[8].toLong()
-                // 调用 simulateMultiSwipe 方法
-                simulateDualTouchSwipe(
-                    startX1, startY1, endX1, endY1,
-                    startX2, startY2, endX2, endY2,
-                    duration
-                )
-            } catch (e: NumberFormatException) {
-                println("Invalid argument format. All arguments must be integers except duration (long).")
-                e.printStackTrace()
-            } catch (e: Exception) {
-                println("An error occurred during execution.")
-                e.printStackTrace()
-            }
-        }
     }
 }
 ```
 
-### 2 Call this class using Root access.
-You need to build an apk, and put it inside your device. Then use app_process to call it. I used libsu here, but a simple "su -c" should also be working. Here, the path '/sdcard/10.apk' is where you put your apk file.
-'com.coc.zkq' is the package name, and you may need to modify this. 'MultiSwipeSimulator' is the class name. The following numbers are just some parameters.
-```
+---
+
+## 2. Executing the Class with Root Access
+
+To run this class on a **rooted Android device**, build an APK and place it in your device storage.  
+Then, use `app_process` to execute it. You can use **libsu** or simply `"su -c"`.
+
+```kotlin
 fun runAppProcessAsRoot() {
     try {
-        // 使用 libsu 执行命令,记得修改路径 (Remember to modify the path!!)
+        // Modify the APK path accordingly!
         val command =
             "app_process -Djava.class.path=/sdcard/10.apk /data/local/tmp com.coc.zkq.MultiSwipeSimulator 200 500 500 500 200 100 500 600 1000"
         val result = Shell.su(command).exec()
 
-        // 输出命令执行结果
         if (result.isSuccess) {
             Log.d("test", "Command executed successfully.")
             result.out.forEach { println(it) }
