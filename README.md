@@ -8,11 +8,11 @@ Kotlin Automation, Multi-finger, Multi touches, Root, Instumentation, InputManag
 ### Core part
 Simulating a real touch is the key part of automation. You can use the Accessibility service to achieve it, but you need to set the whole stroke before dispatching the touches. What if you do not know the whole stroke before sending it? After trying, I found it was extremely hard. Because even with the root permission, you still can not directly inject the gestures into the system. You will get SecurityExecption saying you do not have INJECT_EVENTS permission. So the core part of this repo is here:
 
-### 1 Leave a Class for we to call later
-(I was born in China Mainland and currently, I am living in China Hong Kong. So I am to lazy to translate all the comments to English. But I wrote this repo in Eng because I hope this could help more people.)
+### 1 Leave a Class for us to call later
+(I was born in China Mainland and currently, I am living in China Hong Kong. I am too lazy to translate all the comments into English. But I wrote this repo in Eng because I hope this could help more people.)
 
 
-'''
+```
 package com.coc.zkq
 
 import android.os.SystemClock
@@ -179,9 +179,6 @@ class MultiSwipeSimulator {
                     startX2, startY2, endX2, endY2,
                     duration
                 )
-//                simulateDualTouchSwipe(
-//                    200, 500, 600, 300, 1000, 500, 700, 300, 1000
-//                )
             } catch (e: NumberFormatException) {
                 println("Invalid argument format. All arguments must be integers except duration (long).")
                 e.printStackTrace()
@@ -192,4 +189,29 @@ class MultiSwipeSimulator {
         }
     }
 }
-'''
+```
+
+### 2 Call this class using Root access.
+You need to build an apk, and put it inside your device. Then use app_process to call it. I used libsu here, but a simple "su -c" should also be working. Here, the path '/sdcard/10.apk' is where you put your apk file.
+'com.coc.zkq' is the package name, and you may need to modify this. 'MultiSwipeSimulator' is the class name. The following numbers are just some parameters.
+```
+fun runAppProcessAsRoot() {
+    try {
+        // 使用 libsu 执行命令,记得修改路径 (Remember to modify the path!!)
+        val command =
+            "app_process -Djava.class.path=/sdcard/10.apk /data/local/tmp com.coc.zkq.MultiSwipeSimulator 200 500 500 500 200 100 500 600 1000"
+        val result = Shell.su(command).exec()
+
+        // 输出命令执行结果
+        if (result.isSuccess) {
+            Log.d("test", "Command executed successfully.")
+            result.out.forEach { println(it) }
+        } else {
+            Log.d("test", "Command failed with exit code ${result.code}.")
+            result.err.forEach { println(it) }
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+```
