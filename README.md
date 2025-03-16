@@ -1,0 +1,1 @@
+This is the solution that I bought. But seems like this is only for 懒人精灵. So I didn't have a detailed look into it. I just copy the InputManager part and put it into the files in Mater branch. So you can ignore this branch.
